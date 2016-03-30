@@ -14,15 +14,24 @@ namespace facture.Controllers
         [HttpPost]
         public JsonResult Facturer(CommandeModel commande)
         {
-            return Json(commande);
+            FactureModel result = Calculer(commande);
+            return Json(result);
         }
         public FactureModel Calculer(CommandeModel commande)
         {
             FactureModel result = new FactureModel();
+            result.commande = commande;
+            result.date_facturation = DateTime.Now;
+            double totalHT = 0;
+            double totalTTC = 0;
             foreach(var produit in commande.produits)
             {
-
+                double pourcent = produit.Prix * (produit.TVA / 100);
+                totalTTC += produit.Prix + pourcent;
+                totalHT += produit.Prix;
             }
+            result.total_HT = totalHT;
+            result.total_TTC = totalTTC;
             return result;
         }
        

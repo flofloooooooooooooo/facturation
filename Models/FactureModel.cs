@@ -10,5 +10,6 @@ namespace facture.Models
         public CommandeModel commande { get; set; }
         public double total_TTC { get; set; }
         public double total_HT { get; set; } 
+        public DateTime date_facturation { get; set; }
     }
 }
