@@ -10,7 +10,7 @@ namespace facture.Controllers
 {
     public class HomeController : Controller
     {
-        //{"produits":[{"prix":20,"libelle":"lait","TVA":10},{"prix":20,"libelle":"lait","TVA":10}]}
+        //{"produits":[{"prix":20,"libelle":"pain","TVA":1,"quantite":1},{"prix":20,"libelle":"lait","TVA":10,"quantite":1}]}
         [HttpPost]
         public JsonResult Facturer(CommandeModel commande)
         {
@@ -24,16 +24,16 @@ namespace facture.Controllers
             result.date_facturation = DateTime.Now;
             double totalHT = 0;
             double totalTTC = 0;
-            foreach(var produit in commande.produits)
+            foreach (var produit in commande.produits)
             {
                 double pourcent = produit.Prix * (produit.TVA / 100);
-                totalTTC += produit.Prix + pourcent;
-                totalHT += produit.Prix;
+                totalTTC += (produit.Prix + pourcent) * produit.quantite;
+                totalHT += produit.Prix * produit.quantite;
             }
             result.total_HT = totalHT;
             result.total_TTC = totalTTC;
             return result;
         }
-       
+
     }
 }
